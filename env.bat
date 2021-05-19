@@ -1,5 +1,11 @@
-set NEWVAR=SOMETHING
-set DBHOST=localhost
-set DBUSER=manager
-set DBNAME=pollsdb
-set DBPASS=supersecretpass
+set DBHOST=resourceconnector-postgres.postgres.database.azure.com
+set DBUSER=pollsdb
+set DBNAME=resourceconnector@resourceconnector-postgres
+set DBPASS=microsoft123!
+set DJANGO_ENV=production
+
+set ResourceConnector_demo_TargetServiceEndpoint=resourceconnector-postgres.postgres.database.azure.com
+set ResourceConnector_demo_SubResourceName=pollsdb
+set ResourceConnector_demo_Name=resourceconnector@resourceconnector-postgres
+set ResourceConnector_demo_Key=microsoft123!
+set DJANGO_ENV=production
