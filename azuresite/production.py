@@ -24,10 +24,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 linker_name = "TESTSECRETCONNECTIONSUCCEEDED"
 
-db_name = os.environ['ResourceConnector_' + linker_name + '_NAME']
-db_host = os.environ['ResourceConnector_' + linker_name + '_HOST']
-db_user = os.environ['ResourceConnector_' + linker_name + '_USER']
-db_password = os.environ['ResourceConnector_' + linker_name + '_PASSWORD']
+db_name = os.environ['RESOURCECONNECTOR_' + linker_name + '_NAME']
+db_host = os.environ['RESOURCECONNECTOR_' + linker_name + '_HOST']
+db_user = os.environ['RESOURCECONNECTOR_' + linker_name + '_USER']
+db_password = os.environ['RESOURCECONNECTOR_' + linker_name + '_PASSWORD']
 
 # Configure Postgres database, for connection string
 DATABASES = {                                                                    
