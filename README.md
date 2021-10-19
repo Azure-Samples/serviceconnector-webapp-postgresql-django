@@ -1,4 +1,4 @@
-# Tutorial: Connect a WebApp to Apache Kafka on Confluent Cloud with Service Connector
+# Tutorial: Connect a WebApp to Azure Database for PostgreSQL with Service Connector
 Using the Azure portal, you can deploy a data-driven Python Django web app to Azure App Service and connect it to an Azure Database for PostgreSQL database. You can start with a free pricing tier that can be scaled up at any later time. 
 In this tutorial, you use the Azure portal to complete the following tasks: 
 
