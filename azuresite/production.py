@@ -22,12 +22,11 @@ MIDDLEWARE = [
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-linker_name = "TESTSECRETCONNECTIONSUCCEEDED"
 
-db_name = os.environ['RESOURCECONNECTOR_' + linker_name + '_NAME']
-db_host = os.environ['RESOURCECONNECTOR_' + linker_name + '_HOST']
-db_user = os.environ['RESOURCECONNECTOR_' + linker_name + '_USER']
-db_password = os.environ['RESOURCECONNECTOR_' + linker_name + '_PASSWORD']
+db_name = os.environ['AZURE_POSTGRESQL_NAME']
+db_host = os.environ['AZURE_POSTGRESQL_HOST']
+db_user = os.environ['AZURE_POSTGRESQL_USER']
+db_password = os.environ['AZURE_POSTGRESQL_PASSWORD']
 
 # Configure Postgres database, for connection string
 DATABASES = {                                                                    
