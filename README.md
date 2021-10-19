@@ -135,9 +135,9 @@ With the code deployed and the database in place, the next step is to connect yo
 
 Switch back to the browser tab or window for the web app you created in a previous section. 
 
-Select Configuration (under Settings on the left side), then select Resource Connector at the top of the page. (If you cannot see the Resource Connector button, please use this link) 
+Select Service Connector (Preview) (under Settings on the left side).
 
-Use the Resource Connection button to create a connection. Each connection will generate a set of settings in the Application settings (which are expected by the djangoapp sample). Select the following values (Please make sure you use DB as the connection name): 
+Click create button to create a connection. Each connection will generate a set of settings which can be accessed as environment variables in WebApp application. Select the following values (Please make sure you use DB as the connection name): 
 
 |  Field   | Value  |
 |  ----  | ----  |
