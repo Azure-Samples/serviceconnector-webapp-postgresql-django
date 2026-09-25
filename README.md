@@ -4,14 +4,24 @@ languages:
 - python
 products:
 - service-connector
-description: "Sample projects to connect Azure WebApp to Azure PostgreSQL via Service Connector"
+description: "Instructional Django sample for connecting Azure App Service to PostgreSQL with Service Connector"
 urlFragment: "serviceconnector-webapp-postgresql-django"
 ---
 
 
 # Tutorial: Connect a WebApp to Azure Database for PostgreSQL with Service Connector
-Using the Azure portal, you can deploy a data-driven Python Django web app to Azure App Service and connect it to an Azure Database for PostgreSQL database. You can start with a free pricing tier that can be scaled up at any later time. 
-In this tutorial, you use the Azure portal to complete the following tasks: 
+This repository illustrates how a Django application can connect Azure App
+Service to Azure Database for PostgreSQL through Service Connector.
+
+**Instructional sample, not production-ready.** Configure your own resources
+and secrets.
+
+> [!WARNING]
+> [Django 2.2](https://docs.djangoproject.com/en/2.2/releases/2.2.28/) and
+> [Python 3.8](https://peps.python.org/pep-0569/#lifespan) are end-of-life and no
+> longer receive upstream security fixes. Upgrade before production use.
+
+This tutorial covers:
 
 - Provision a web app in Azure that deploys from a GitHub repo 
 
@@ -25,7 +35,21 @@ In this tutorial, you use the Azure portal to complete the following tasks:
 
 **Fork** the repository into your own GitHub account. 
 
-You create a fork of this repository so you can make changes and redeploy the code in a later step. 
+### Required secret configuration
+
+Set `DJANGO_SECRET_KEY` in the environment; missing or blank values prevent
+startup. Generate a unique key per environment with Python's
+`secrets.token_urlsafe(64)` and reuse it across restarts and replicas.
+Keep secrets out of Git and never use placeholders as credentials.
+
+### Local development (optional)
+
+Set `DJANGO_ENV=development` and `DJANGO_SETTINGS_MODULE=azuresite.settings`.
+Local settings use SQLite. Production debugging is disabled.
+
+The legacy `env.bat`, `env.ps1`, and `env.sh` helpers require `DBPASS`;
+`env.bat` also requires `ResourceConnector_demo_Key`. These are separate from
+the `AZURE_POSTGRESQL_*` settings used by Django.
 
 
 ## 2. Provision the web app in Azure 
@@ -121,6 +145,23 @@ Exit psql by running the command exit.
 ## 4. Deploy app code to the web app from a repository 
 With the database and connection settings in place, you can now configure the web app to deploy code directly from a GitHub repository. 
 
+### Configure application settings before deployment
+
+Complete [Connect the database](#5-connect-the-database) before deployment.
+Then add these values under **Settings > Environment variables > App settings**,
+replacing the placeholder with your key:
+
+| Setting | Value |
+| --- | --- |
+| `DJANGO_ENV` | `production` |
+| `DJANGO_SETTINGS_MODULE` | `azuresite.production` |
+| `DJANGO_SECRET_KEY` | `<your-generated-key>` |
+
+An [App Service Key Vault reference](https://learn.microsoft.com/azure/app-service/app-service-key-vault-references)
+can supply the key. Management commands and CI jobs also need the required settings.
+
+### Connect the GitHub repository
+
 - In the browser window or tab for the web app, select Deployment Center (under Deployment on the left side). 
 
 - In the **Source**, select **GitHub** and then **Authorize** (if necessary). Then follow the sign-in prompts or select Continue to use your current GitHub login. Make sure you are **building with Github Actions**. 
@@ -137,12 +178,12 @@ If you see a popup window that says authentication succeeded, but the portal sti
 | Version   |  Python 3.8  |
  
  
-- Select Save. Azure should deploy the code within a few seconds and start the app. 
+- Select **Save** to start the configured deployment workflow.
 App Service detects a Django project by looking for a wsgi.py file in each subfolder. When App Service finds that file, it loads the Django web app. For more information, see Configure built-in Python image. 
 
 ## 5. Connect the database 
 
-With the code deployed and the database in place, the next step is to connect your app service to the database. In this section, you create settings for the web app that it needs to connect to the pollsdb database. These settings appear to the app code as environment variables. (For more information, see Access environment variables.) 
+With the web app and database provisioned, connect the app service to the database before deploying the Django code. In this section, you create settings for the web app that it needs to connect to the pollsdb database. These settings appear to the app code as environment variables. (For more information, see Access environment variables.)
 
 Switch back to the browser tab or window for the web app you created in a previous section. 
 
@@ -205,23 +246,24 @@ Create an administrator login for the app:
 ```
 python manage.py createsuperuser 
 ```
-The createsuperuser command prompts you for Django superuser (or admin) credentials, which are used within the web app. For the purposes of this tutorial, use the default username root, press Enter for the email address to leave it blank, and enter Pollsdb1 for the password. 
+Choose your own administrator username and a strong, unique password at the
+`createsuperuser` prompt. Do not reuse a tutorial password.
 
 ## 7. Create a poll question in the app 
 
-You're now ready to run a quick test of the app to demonstrate that it is working with the PostgreSQL database. 
+After configuration, use the following steps to explore the polls app.
 
 - In the browser window or tab for the web app, return to the Overview page, then select the URL for the web app (of the form `http://<app-name>.azurewebsites.net`). 
 
 - The app should display the message "Polls app" and "No polls are available" because there are no specific polls yet in the database. 
 
-- Browse to `http://<app-name>.azurewebsites.net/admin` (the "Django Administration" page) and sign in using the Django superuser credentials from the previous section (root and Pollsdb1). 
+- Browse to `https://<app-name>.azurewebsites.net/admin` (the "Django Administration" page) and sign in using the administrator credentials you created in the previous section.
 
 - Under Polls, select Add next to Questions and create a poll question with some choices. 
 
 - Browse again to `http://<app-name>.azurewebsites.net/` to confirm that the questions are now presented to the user. Answer questions however you like to generate some data in the database. 
 
-**Congratulations!** You're running a Python Django web app in Azure App Service for Linux, with an active PostgreSQL database. 
+**Congratulations!** You're running a Python Django web app in Azure App Service for Linux, with an active PostgreSQL database.
 
 ## 8. Clean up resources  
 
